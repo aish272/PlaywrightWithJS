@@ -1,7 +1,6 @@
-const {test, expect} = require('@playwright/test')
+const { test, expect } = require('@playwright/test')
 
-test.only("End to end E-commerce test",async({page})=>
-{
+test.only("End to end E-commerce test", async ({ page }) => {
    const products = page.locator(".card-body");
    const productName = "ZARA COAT 3";
    const email = "anshika@gmail.com";
@@ -16,18 +15,16 @@ test.only("End to end E-commerce test",async({page})=>
    await products.first().waitFor();
    const count = await products.count();
    console.log(count);
-   for(let i =0; i<count; i++)
-   {
+   for (let i = 0; i < count; i++) {
       let item = await products.nth(i).locator("b").textContent();
       console.log(item);
-      if(item==productName)
-      {
+      if (item == productName) {
          await products.nth(i).locator("text =' Add To Cart'").click();
          break;
 
       }
    }
-   
+
 
    await page.locator("[routerlink*='cart']").click();
    await page.locator("div li").first().waitFor(); //need to wait for the page to load because isVisible() is not supported by auto-wait
@@ -43,11 +40,9 @@ test.only("End to end E-commerce test",async({page})=>
 
    const options = dropdown.locator("button");
    const optionCount = await options.count();
-   for(let i=0; i<optionCount; i++)
-   {
+   for (let i = 0; i < optionCount; i++) {
       let text = await options.nth(i).textContent();
-      if(text.trim()==="India")
-      {
+      if (text.trim() === "India") {
          await options.nth(i).click();
          break;
       }
@@ -57,7 +52,7 @@ test.only("End to end E-commerce test",async({page})=>
    //await page.pause();
    await expect(page.locator(".user__name label")).toHaveText(email);
    await page.locator(".action__submit").click();
-   
+
    //Step: validate order successful confirmation
 
    await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
@@ -74,19 +69,17 @@ test.only("End to end E-commerce test",async({page})=>
    await rows.last().waitFor();
    const rowCount = await rows.count();
    console.log(rowCount);
-   for(let i =0; i<rowCount; i++)
-   {
+   for (let i = 0; i < rowCount; i++) {
       let text = await rows.nth(i).locator("[scope='row']").textContent();
       text = text.trim();
       console.log(text);
-      if(text===orderId)
-      {
+      if (text === orderId) {
          await rows.nth(i).locator(".btn-primary").click();
          break;
       }
    }
    await page.locator(".email-wrapper").first().waitFor();
-   
+
    await expect(page.locator(".row .col-text")).toHaveText(orderId);
 
 
